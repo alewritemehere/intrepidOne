@@ -1,4 +1,8 @@
 # INTREPID ONE 🛰️
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://intrepidone.streamlit.app)
+
+**Live Demo:** [Launch the NASA Coolest Route App](https://intrepidone.streamlit.app)
+
 ### Earth System Trend Detective & Urban Cool-Shade Router
 **Official Submission for NASA International Space Apps Challenge — Rome 2026**  
 **Challenge:** [Be An Earth System Trend Detective!](https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/)  
