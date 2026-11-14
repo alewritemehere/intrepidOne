@@ -435,11 +435,11 @@ with tab_map:
         st.success(f"💡 **Vantaggio**: Con soli +{int((cool['distance_km'] - direct['distance_km'])*1000)} metri di cammino in più, riduci l'esposizione al calore estremo di **-{direct['avg_temp_c'] - cool['avg_temp_c']:.1f} °C**!")
 
     with scen_col2:
-        # Build Folium Map
+        # Build Folium Map with clean OpenStreetMap tiles (no watermarks)
         m = folium.Map(
             location=current_scen["center"],
             zoom_start=current_scen["zoom"],
-            tiles="CartoDB dark_matter",
+            tiles="OpenStreetMap",
             control_scale=True
         )
 
