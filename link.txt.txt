@@ -1,0 +1,5 @@
+#specifiche tecniche e grafiche
+https://www.spaceappschallenge.org/brand/
+
+#fonti dati disponibili e API
+https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/?tab=resources
