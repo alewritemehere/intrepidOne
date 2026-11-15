@@ -229,6 +229,10 @@ with st.spinner("Retrieving NASA Earth Science records..."):
     climate_bundle = get_climate_data(lat=city_coords["lat"], lon=city_coords["lon"], start_year=start_year, end_year=end_year)
 
 df_to_analyze = climate_bundle["summer"] if "Summer Months" in season_choice else climate_bundle["annual"]
+data_start_year = int(df_to_analyze["year"].min()) if not df_to_analyze.empty and "year" in df_to_analyze.columns else start_year
+data_end_year = int(df_to_analyze["year"].max()) if not df_to_analyze.empty and "year" in df_to_analyze.columns else end_year
+timespan_years = data_end_year - data_start_year + 1
+
 stats = calculate_trend_statistics(df_to_analyze, variable=selected_var_code)
 var_meta = VARIABLES_METADATA.get(selected_var_code, {"name": selected_var_code, "unit": "°C", "description": ""})
 
@@ -245,8 +249,8 @@ tab_trends, tab_map, tab_method = st.tabs([
 # TAB 1: Trend Detective
 # =========================================================
 with tab_trends:
-    st.markdown(f"### Temporal Trend Analysis: **{var_meta['name']}** ({selected_city_name})")
-    st.caption(f"Timeframe: {start_year} - {end_year} • {season_choice} • Source: NASA POWER API (MERRA-2 Model)")
+    st.subheader(f"Temporal Trend Analysis: {var_meta['name']} — {selected_city_name}")
+    st.caption(f"Timeframe: {data_start_year} - {data_end_year} ({timespan_years} years) • {season_choice} • Source: NASA POWER API (MERRA-2 Model)")
 
     # 4 Key Scientific Metric Cards
     c1, c2, c3, c4 = st.columns(4)
@@ -286,7 +290,7 @@ with tab_trends:
         <div class="metric-card">
             <div class="metric-label">Total Observed Change</div>
             <div class="metric-value">+{delta_warming:.2f} {var_meta['unit']}</div>
-            <span class="metric-badge badge-alert">vs {start_year}-{start_year+9} baseline</span>
+            <span class="metric-badge badge-alert">vs {data_start_year}-{min(data_start_year+9, data_end_year)} baseline</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -395,7 +399,8 @@ with tab_trends:
 # =========================================================
 with tab_map:
     st.markdown("### 🗺️ Urban Resilience Navigator: Thermal Surface Heat & Cool Shaded Paths")
-    st.write("Given the verified warming trend, this tool transforms satellite climate data into pedestrian protection, identifying heat islands and calculating shade-optimized walking routes.")
+    st.caption("Urban Shadow & Canopy Model — Parametric Microclimate Prototype (Rome Case Study)")
+    st.write("Given the verified warming trend, this tool transforms climate data into pedestrian protection, identifying heat islands and calculating shade-optimized walking routes.")
 
     scenarios = get_scenarios()
     scen_col1, scen_col2 = st.columns([1, 2])
@@ -504,10 +509,10 @@ with tab_method:
     col_meta1, col_meta2 = st.columns([1, 1])
 
     with col_meta1:
-        st.markdown("""
+        st.markdown(f"""
         #### 🛰️ NASA Data & Computation Pipeline
         1. **NASA POWER API (MERRA-2 Data Assimilation)**:
-           - Continuous 30-year climate records (1995-2024) of 2-meter air temperature ($T_{2m}$), maximum temperature ($T_{2m\\text{ Max}}$), radiative surface skin temperature ($T_{skin}$), and shortwave downward insolation.
+           - Continuous {timespan_years}-year climate records ({data_start_year}–{data_end_year}) of 2-meter air temperature ($T_{{2m}}$), maximum temperature ($T_{{2m\\text{{ Max}}}}$), radiative surface skin temperature ($T_{{skin}}$), and shortwave downward insolation.
            - Global geophysical reanalysis and assimilation model rigorously validated against satellite radiometry and surface observations.
         2. **Earth System Trend Detective (Statistical Engine)**:
            - **Mann-Kendall Non-Parametric Test**: evaluates monotonic trends over time without assuming normally distributed residuals.
@@ -518,7 +523,7 @@ with tab_method:
         """)
 
         st.info(
-            "**Prototype Scope & Transparency:** While the 30-year climate trend analysis is computed directly from real NASA POWER (MERRA-2) records, the street-level routing module currently uses a parametric microclimate simulation for Rome as a proof-of-concept—designed to integrate high-resolution NASA ECOSTRESS/Landsat Land Surface Temperature layers and OpenStreetMap 3D building/tree data in production."
+            f"**Prototype Scope & Transparency:** While the {timespan_years}-year climate trend analysis ({data_start_year}–{data_end_year}) is computed directly from real NASA POWER (MERRA-2) records, the street-level routing module currently uses a parametric microclimate simulation for Rome as a proof-of-concept—designed to integrate high-resolution NASA ECOSTRESS/Landsat Land Surface Temperature layers and OpenStreetMap 3D building/tree data in production."
         )
 
     with col_meta2:
@@ -534,9 +539,10 @@ with tab_method:
     st.markdown("---")
     st.markdown("#### 📥 Export Analyzed Climate Data")
     csv_bytes = df_to_analyze.to_csv(index=False).encode('utf-8')
+    city_slug = selected_city_name.split('(')[0].strip().lower().replace(' ', '_')
     st.download_button(
         label="Download Processed Dataset (CSV)",
         data=csv_bytes,
-        file_name=f"nasa_trend_{selected_city_name}_{selected_var_code}_{start_year}_2024.csv",
+        file_name=f"intrepidone_nasa_trends_{city_slug}_{selected_var_code.lower()}_{data_start_year}_{data_end_year}.csv",
         mime="text/csv"
     )
