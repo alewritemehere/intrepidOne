@@ -201,8 +201,9 @@ with st.sidebar:
     st.markdown("""
     **Rome 2026 Mission Event:**
     - **Local Lead**: Dr. Youcef Yahi
-    - **Host Venue**: Faculty of Engineering, Univ. of Rome Tor Vergata
-    - **Team**: IntrepidOne (Solo Participant)
+    - **Host Venue**: University of Rome Tor Vergata
+    - **Team**: IntrepidOne
+    - **Team Owner**: Alessandro Intropido *(Solo Participant)*
     """)
 
 # ---------------------------------------------------------
@@ -378,13 +379,16 @@ with tab_trends:
 
     # Scientific Verdict Callout Box
     st.markdown(f"""
-    > [!IMPORTANT]
-    > **Scientific Verdict for NASA Judges (Earth System Trend Detective):**
-    > - **What is changing?** {var_meta['name']} across {selected_city_name}.
-    > - **Where is it changing?** Regional urban warming concentrated inside expanding Urban Heat Islands (UHI).
-    > - **How much is it changing?** Robust Sen's slope of **+{stats['sen_slope_decade']:.2f} {var_meta['unit']} per decade** (+{delta_warming:.2f} {var_meta['unit']} total change over the study period).
-    > - **Is it statistically significant?** **Yes.** The non-parametric Mann-Kendall test yields **p-value = {p_val_str}**, well below the canonical significance threshold α = 0.05. The upward trajectory is systematic, not random noise.
-    """)
+    <div class="metric-card" style="border-left: 4px solid #2E96F5; margin-top: 16px;">
+        <div class="metric-label" style="font-size: 0.95rem; margin-bottom: 8px;">🔬 Earth System Trend Summary</div>
+        <ul style="margin: 0; padding-left: 20px; color: #FFFFFF; line-height: 1.6;">
+            <li><b>What is changing?</b> {var_meta['name']} across {selected_city_name}.</li>
+            <li><b>Where is it changing?</b> Regional urban warming concentrated inside expanding Urban Heat Islands (UHI).</li>
+            <li><b>How much is it changing?</b> Robust Sen's slope of <b>{stats['sen_slope_decade']:+.2f} {var_meta['unit']} per decade</b> ({delta_warming:+.2f} {var_meta['unit']} total change over the study period).</li>
+            <li><b>Is it statistically significant?</b> <b>{'Yes' if stats['is_significant'] else 'No'}.</b> The non-parametric Mann-Kendall test yields <b>p-value = {p_val_str}</b> ({'below' if stats['is_significant'] else 'above'} the canonical significance threshold &alpha; = 0.05).</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
 # =========================================================
 # TAB 2: Thermal Map & Cool Routes (Urban Action)
@@ -495,7 +499,7 @@ with tab_map:
 # TAB 3: Methodology & NASA Criteria
 # =========================================================
 with tab_method:
-    st.markdown("### 🔬 Scientific Methodology & NASA Evaluation Criteria")
+    st.markdown("### 🔬 Scientific Methodology & Civic Impact Framework")
 
     col_meta1, col_meta2 = st.columns([1, 1])
 
@@ -504,7 +508,7 @@ with tab_method:
         #### 🛰️ NASA Data & Computation Pipeline
         1. **NASA POWER API (MERRA-2 Data Assimilation)**:
            - Continuous 30-year climate records (1995-2024) of 2-meter air temperature ($T_{2m}$), maximum temperature ($T_{2m\\text{ Max}}$), radiative surface skin temperature ($T_{skin}$), and shortwave downward insolation.
-           - High-resolution geophysical assimilation model rigorously validated by satellite radiometry and ocean buoys.
+           - Global geophysical reanalysis and assimilation model rigorously validated against satellite radiometry and surface observations.
         2. **Earth System Trend Detective (Statistical Engine)**:
            - **Mann-Kendall Non-Parametric Test**: evaluates monotonic trends over time without assuming normally distributed residuals.
            - **Sen's Slope Estimator**: median slope across all sample point pairs, highly resilient against extreme climatic outliers and noise.
@@ -515,12 +519,12 @@ with tab_method:
 
     with col_meta2:
         st.markdown("""
-        #### 🏆 Alignment with NASA Judging Criteria (Rome 2026)
-        - **Impact**: Provides urban planners, tourists, and vulnerable citizens with actionable heatstroke prevention during extreme summer heatwaves.
-        - **Creativity**: Translates macro Earth science satellite observations directly into street-level pedestrian micro-routing in real time.
-        - **Validity**: Implements peer-reviewed statistical formulas (Mann-Kendall + Sen's Slope) and verified NASA assimilation datasets.
-        - **Relevance**: Directly answers the four core challenge questions: *what is changing, where it is changing, how much, and if it is significant*.
-        - **Presentation**: Engineered strictly in accordance with NASA Space Apps 2026 Brand Guidelines and WCAG contrast standards.
+        #### 🌍 Operational Value & Design Principles (Rome 2026)
+        - **Civic & Urban Impact**: Protects daily commuters, tourists, and vulnerable citizens from summer heat stress while offering urban planners clear evidence for green corridors.
+        - **Translational Innovation**: Bridges macro Earth science satellite observations directly with street-level pedestrian micro-routing.
+        - **Scientific Validity**: Built on peer-reviewed non-parametric statistical methods (Mann-Kendall + Sen's Slope) and verified NASA open datasets.
+        - **Challenge Relevance**: Directly answers the four core Earth system questions: *what is changing, where it is changing, how much, and whether it is statistically significant*.
+        - **Accessible Presentation**: Designed in accordance with NASA Space Apps 2026 Brand Guidelines and WCAG visual contrast standards.
         """)
 
     st.markdown("---")
