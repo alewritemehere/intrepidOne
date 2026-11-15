@@ -513,9 +513,13 @@ with tab_method:
            - **Mann-Kendall Non-Parametric Test**: evaluates monotonic trends over time without assuming normally distributed residuals.
            - **Sen's Slope Estimator**: median slope across all sample point pairs, highly resilient against extreme climatic outliers and noise.
            - **P-Value (Statistical Significance)**: verifies whether the probability of the trend occurring purely by random chance is strictly below the 5% alpha threshold ($p < 0.05$).
-        3. **Urban Shadow & Microclimate Routing**:
+        3. **Urban Shadow & Microclimate Routing (Prototype)**:
            - Combines building height-to-width ($H/W$) aspect ratios in urban canyons with tree canopy coverage to estimate mean radiant temperature and shaded pedestrian corridors across Rome.
         """)
+
+        st.info(
+            "**Prototype Scope & Transparency:** While the 30-year climate trend analysis is computed directly from real NASA POWER (MERRA-2) records, the street-level routing module currently uses a parametric microclimate simulation for Rome as a proof-of-concept—designed to integrate high-resolution NASA ECOSTRESS/Landsat Land Surface Temperature layers and OpenStreetMap 3D building/tree data in production."
+        )
 
     with col_meta2:
         st.markdown("""
